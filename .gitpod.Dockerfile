@@ -1,23 +1,14 @@
 FROM gitpod/workspace-full
 
-ENV ANDROID_HOME=/home/gitpod/android-sdk \
-    FLUTTER_HOME=/home/gitpod/flutter
+ENV FLUTTER_HOME=/home/gitpod/flutter \
+    FLUTTER_VERSION=v1.9.1+hotfix.6-stable
 
+# Install dart
 USER root
 
-# Install custom tools, runtime, etc. using apt-get
-# For example, the command below would install "bastet" - a command line tetris clone:
-#
-# RUN apt-get update \
-#    && apt-get install -y bastet \
-#    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-#
-# More information: https://www.gitpod.io/docs/42_config_docker/
-
 RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
     apt-get update && \
-    apt-get -y install build-essential dart libkrb5-dev gcc make gradle android-tools-adb android-tools-fastboot openjdk-8-jdk && \
+    apt-get -y install libpulse0 build-essential libkrb5-dev gcc make && \
     apt-get clean && \
     apt-get -y autoremove && \
     apt-get -y clean && \
@@ -25,21 +16,16 @@ RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - &
 
 USER gitpod
 
+# Install Flutter sdk
 RUN cd /home/gitpod && \
-    wget -qO flutter_sdk.tar.xz \
-    https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.9.1+hotfix.4-stable.tar.xz &&\
-    tar -xvf flutter_sdk.tar.xz && \
-    rm -f flutter_sdk.tar.xz
+  wget -qO flutter_sdk.tar.xz https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}.tar.xz && \
+  tar -xvf flutter_sdk.tar.xz && rm flutter_sdk.tar.xz
 
-RUN cd /home/gitpod && \
-    wget -qO android_studio.zip \
-    https://dl.google.com/dl/android/studio/ide-zips/3.3.0.20/android-studio-ide-182.5199772-linux.zip && \
-    unzip android_studio.zip && \
-    rm -f android_studio.zip
+# Web is available on master channel
+RUN $FLUTTER_HOME/bin/flutter channel master && $FLUTTER_HOME/bin/flutter upgrade && $FLUTTER_HOME/bin/flutter config --enable-web
 
-# TODO(tianhaoz95): make the name of the SDK file into an environment variable to avoid maintainance issue
-RUN mkdir -p /home/gitpod/android-sdk && \
-    cd /home/gitpod/android-sdk && \
-    wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip && \
-    unzip sdk-tools-linux-4333796.zip && \
-    rm -f sdk-tools-linux-4333796.zip
+# Change the PUB_CACHE to /workspace so dependencies are preserved.
+ENV PUB_CACHE=/workspace/.pub_cache
+
+# add executables to PATH
+RUN echo 'export PATH=${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin:${PUB_CACHE}/bin:${FLUTTER_HOME}/.pub-cache/bin:$PATH' >>~/.bashrc

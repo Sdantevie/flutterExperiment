@@ -1,0 +1,1 @@
+enum CounterMode { UP, DOWN }

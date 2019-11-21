@@ -1,4 +1,5 @@
 {
-    "mode": "UP",
+    "countUp": true,
+    "title": "The First Counter",
     "targetDate": "2012-02-27 13:27:00"
 }

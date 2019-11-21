@@ -1,5 +1,4 @@
 import 'package:counter/features/counter/domain/entities/counter.dart';
-import 'package:counter/features/counter/domain/entities/counter_mode.dart';
 import 'package:counter/features/counter/domain/repository/counter_repository.dart';
 import 'package:counter/features/counter/domain/usecases/create_counter.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,7 +15,7 @@ void main() {
     createCounter = CreateCounter(mockCounterRepository);
   });
 
-  final counter = Counter(mode: CounterMode.UP, targetDate: DateTime.now());
+  final counter = Counter(countUp: true, targetDate: DateTime.now());
 
   test('should create counter', () async {
     when(mockCounterRepository.createCounter(any))

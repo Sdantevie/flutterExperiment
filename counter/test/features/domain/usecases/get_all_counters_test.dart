@@ -1,6 +1,5 @@
 import 'package:counter/core/usecases/usecase.dart';
 import 'package:counter/features/counter/domain/entities/counter.dart';
-import 'package:counter/features/counter/domain/entities/counter_mode.dart';
 import 'package:counter/features/counter/domain/repository/counter_repository.dart';
 import 'package:counter/features/counter/domain/usecases/get_all_counters.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +16,7 @@ void main() {
   });
 
   final counters = <Counter>[
-    Counter(mode: CounterMode.UP, targetDate: DateTime.now())
+    Counter(countUp: true, targetDate: DateTime.now())
   ];
 
   test('should get all counters', () async {

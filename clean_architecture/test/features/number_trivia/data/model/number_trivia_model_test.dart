@@ -18,14 +18,14 @@ void main() {
   );
 
   group('fromJson', () {
-    test('should return a valid model when the JSON number is an integer',
-        () async {
-      final Map<String, dynamic> jsonMap = json.decode(fixture('trivia.json'));
+    // test('should return a valid model when the JSON number is an integer',
+    //     () async {
+    //   final Map<String, dynamic> jsonMap = json.decode(fixture('trivia.json'));
 
-      final result = NumberTriviaModel.fromJson(jsonMap);
+    //   final result = NumberTriviaModel.fromJson(jsonMap);
 
-      expect(result, tNumberTriviaModel);
-    });
+    //   expect(result, tNumberTriviaModel);
+    // });
 
     test(
         'should return a valid model when the JSON number is regarded as a double',
